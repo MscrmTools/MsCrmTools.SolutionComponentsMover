@@ -5,16 +5,41 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SolutionComponentsMover
 {
-    public partial class MainControl : PluginControlBase
+    public partial class MainControl : PluginControlBase , IGitHubPlugin, IHelpPlugin
     {
         private SolutionManager sManager;
 
         public MainControl()
         {
             InitializeComponent();
+        }
+
+        public string HelpUrl
+        {
+            get
+            {
+                return "https://github.com/MscrmTools/MsCrmTools.SolutionComponentsMover/wiki";
+            }
+        }
+
+        public string RepositoryName
+        {
+            get
+            {
+                return "MsCrmTools.SolutionComponentsMover";
+            }
+        }
+
+        public string UserName
+        {
+            get
+            {
+                return "MscrmTools";
+            }
         }
 
         public void LoadSolutions()
