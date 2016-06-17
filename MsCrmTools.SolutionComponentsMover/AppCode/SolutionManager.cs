@@ -31,7 +31,6 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
                 {
                     Conditions =
                     {
-                        //new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
                         new ConditionExpression("isvisible", ConditionOperator.Equal, true),
                         new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default")
                     }
@@ -59,8 +58,15 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
                         ComponentId = component.GetAttributeValue<Guid>("objectid"),
                         ComponentType = component.GetAttributeValue<OptionSetValue>("componenttype").Value,
                         SolutionUniqueName = target.GetAttributeValue<string>("uniquename"),
-                        DoNotIncludeSubcomponents = component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 1 || component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 2,
                     };
+
+                    // If CRM 2016 or above, handle subcomponents behavior
+                    if (settings.ConnectionDetail.OrganizationMajorVersion >= 8)
+                    {
+                        request.DoNotIncludeSubcomponents =
+                            component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 1 ||
+                            component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 2;
+                    }
 
                     service.Execute(request);
                 }

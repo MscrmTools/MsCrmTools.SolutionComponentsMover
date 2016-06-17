@@ -80,7 +80,8 @@ namespace MsCrmTools.SolutionComponentsMover
             var settings = new CopySettings
             {
                 SourceSolutions = sourceSolutionPicker.SelectedSolutions,
-                TargetSolutions = targetSolutionPicker.SelectedSolutions
+                TargetSolutions = targetSolutionPicker.SelectedSolutions,
+                ConnectionDetail = ConnectionDetail
             };
 
             var csForm = new ComponentTypeSelector();

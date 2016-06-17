@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MscrmTools")]
 [assembly: AssemblyProduct("MsCrmTools.SolutionComponentsMover")]
-[assembly: AssemblyCopyright("Copyright ©MscrmTools  2014")]
+[assembly: AssemblyCopyright("Copyright ©MscrmTools 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2016.5.2")]
-[assembly: AssemblyFileVersion("1.2016.5.2")]
+[assembly: AssemblyVersion("1.2016.6.3")]
+[assembly: AssemblyFileVersion("1.2016.6.3")]
