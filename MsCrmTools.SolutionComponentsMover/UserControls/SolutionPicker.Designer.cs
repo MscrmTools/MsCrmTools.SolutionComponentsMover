@@ -44,12 +44,14 @@
             this.lvSolutions.FullRowSelect = true;
             this.lvSolutions.HideSelection = false;
             this.lvSolutions.Location = new System.Drawing.Point(0, 0);
+            this.lvSolutions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvSolutions.Name = "lvSolutions";
-            this.lvSolutions.Size = new System.Drawing.Size(483, 731);
+            this.lvSolutions.Size = new System.Drawing.Size(724, 1142);
             this.lvSolutions.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvSolutions.TabIndex = 0;
             this.lvSolutions.UseCompatibleStateImageBehavior = false;
             this.lvSolutions.View = System.Windows.Forms.View.Details;
+            this.lvSolutions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvSolutions_MouseDoubleClick);
             // 
             // columnHeader1
             // 
@@ -68,12 +70,13 @@
             // 
             // SolutionPicker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.lvSolutions);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "SolutionPicker";
-            this.Size = new System.Drawing.Size(483, 731);
+            this.Size = new System.Drawing.Size(724, 1142);
             this.ResumeLayout(false);
 
         }

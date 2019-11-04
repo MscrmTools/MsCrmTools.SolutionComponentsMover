@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
+using MsCrmTools.SolutionComponentsMover.AppCode;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,6 +15,8 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
         {
             InitializeComponent();
         }
+
+        public event EventHandler<SolutionSelectedEventArgs> OnSolutionSelected;
 
         public bool CanDisplayManagedSolutions { get; set; }
 
@@ -47,6 +51,12 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
             }
 
             lvSolutions.Items.AddRange(list.ToArray());
+        }
+
+        private void lvSolutions_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lvSolutions.SelectedItems.Count == 1)
+                OnSolutionSelected?.Invoke(this, new SolutionSelectedEventArgs((Entity)lvSolutions.SelectedItems.Cast<ListViewItem>().First().Tag));
         }
     }
 }

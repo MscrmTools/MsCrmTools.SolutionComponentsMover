@@ -48,27 +48,40 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
 
             foreach (var target in settings.TargetSolutions)
             {
-                backgroundWorker.ReportProgress(0, string.Format("Adding {0} components to solution '{1}'", components.Count, target.GetAttributeValue<string>("friendlyname")));
+                backgroundWorker.ReportProgress(0,
+                    $"Adding {components.Count} components to solution '{target.GetAttributeValue<string>("friendlyname")}'");
 
-                foreach (var component in components)
+                AddSolutionComponentRequest request = new AddSolutionComponentRequest();
+
+                try
                 {
-                    var request = new AddSolutionComponentRequest
+                    foreach (var component in components)
                     {
-                        AddRequiredComponents = false,
-                        ComponentId = component.GetAttributeValue<Guid>("objectid"),
-                        ComponentType = component.GetAttributeValue<OptionSetValue>("componenttype").Value,
-                        SolutionUniqueName = target.GetAttributeValue<string>("uniquename"),
-                    };
+                        request = new AddSolutionComponentRequest
+                        {
+                            AddRequiredComponents = false,
+                            ComponentId = component.GetAttributeValue<Guid>("objectid"),
+                            ComponentType = component.GetAttributeValue<OptionSetValue>("componenttype").Value,
+                            SolutionUniqueName = target.GetAttributeValue<string>("uniquename"),
+                        };
 
-                    // If CRM 2016 or above, handle subcomponents behavior
-                    if (settings.ConnectionDetail.OrganizationMajorVersion >= 8)
-                    {
-                        request.DoNotIncludeSubcomponents =
-                            component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 1 ||
-                            component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 2;
+                        // If CRM 2016 or above, handle subcomponents behavior
+                        if (settings.ConnectionDetail.OrganizationMajorVersion >= 8)
+                        {
+                            request.DoNotIncludeSubcomponents =
+                                component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 1 ||
+                                component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 2;
+                        }
+
+                        service.Execute(request);
+                        backgroundWorker.ReportProgress(1,
+                            $"Component {request.ComponentId} of type {request.ComponentType} successfully added to solution '{request.SolutionUniqueName}'");
                     }
-
-                    service.Execute(request);
+                }
+                catch (Exception error)
+                {
+                    backgroundWorker.ReportProgress(-1,
+                        $"Error when adding component {request.ComponentId} of type {request.ComponentType} to solution '{request.SolutionUniqueName}' : {error.Message}");
                 }
             }
         }

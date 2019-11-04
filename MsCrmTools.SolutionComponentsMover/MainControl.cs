@@ -1,16 +1,21 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.SolutionComponentsMover.AppCode;
 using MsCrmTools.SolutionComponentsMover.Forms;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SolutionComponentsMover
 {
-    public partial class MainControl : PluginControlBase , IGitHubPlugin, IHelpPlugin
+    public partial class MainControl : PluginControlBase, IGitHubPlugin, IHelpPlugin
     {
+        private OptionMetadataCollection _omc;
         private SolutionManager sManager;
 
         public MainControl()
@@ -18,29 +23,11 @@ namespace MsCrmTools.SolutionComponentsMover
             InitializeComponent();
         }
 
-        public string HelpUrl
-        {
-            get
-            {
-                return "https://github.com/MscrmTools/MsCrmTools.SolutionComponentsMover/wiki";
-            }
-        }
+        public string HelpUrl => "https://github.com/MscrmTools/MsCrmTools.SolutionComponentsMover/wiki";
 
-        public string RepositoryName
-        {
-            get
-            {
-                return "MsCrmTools.SolutionComponentsMover";
-            }
-        }
+        public string RepositoryName => "MsCrmTools.SolutionComponentsMover";
 
-        public string UserName
-        {
-            get
-            {
-                return "MscrmTools";
-            }
-        }
+        public string UserName => "MscrmTools";
 
         public void LoadSolutions()
         {
@@ -52,6 +39,13 @@ namespace MsCrmTools.SolutionComponentsMover
                 Work = (bw, e) =>
                 {
                     e.Result = sManager.RetrieveSolutions();
+
+                    _omc = ((OptionSetMetadata)((RetrieveOptionSetResponse)Service.Execute(
+                        new RetrieveOptionSetRequest
+                        {
+                            Name = "componenttype"
+                        })).OptionSetMetadata).Options;
+                    //_omc
                 },
                 PostWorkCallBack = e =>
                 {
@@ -70,6 +64,16 @@ namespace MsCrmTools.SolutionComponentsMover
             });
         }
 
+        private void lvLogs_Resize(object sender, EventArgs e)
+        {
+            chMessage.Width = lvLogs.Width;
+        }
+
+        private void SolutionSelected(object sender, SolutionSelectedEventArgs e)
+        {
+            Process.Start($"{ConnectionDetail.WebApplicationUrl}/tools/solution/edit.aspx?id={e.Solution.Id}");
+        }
+
         private void tsbCloseThisTab_Click(object sender, EventArgs e)
         {
             CloseTool();
@@ -84,7 +88,7 @@ namespace MsCrmTools.SolutionComponentsMover
                 ConnectionDetail = ConnectionDetail
             };
 
-            var csForm = new ComponentTypeSelector();
+            var csForm = new ComponentTypeSelector(_omc);
             if (csForm.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 settings.ComponentsTypes = csForm.SelectedComponents;
@@ -111,7 +115,21 @@ namespace MsCrmTools.SolutionComponentsMover
                             MessageBoxIcon.Error);
                     }
                 },
-                ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+                ProgressChanged = evt =>
+                {
+                    if (evt.ProgressPercentage == 0)
+                    {
+                        SetWorkingMessage(evt.UserState.ToString());
+                    }
+                    else if (evt.ProgressPercentage == -1)
+                    {
+                        lvLogs.Items.Add(new ListViewItem(evt.UserState.ToString()) { ForeColor = Color.Red });
+                    }
+                    else if (evt.ProgressPercentage == 1)
+                    {
+                        lvLogs.Items.Add(new ListViewItem(evt.UserState.ToString()) { ForeColor = Color.Green });
+                    }
+                }
             });
         }
 
