@@ -64,6 +64,24 @@ namespace MsCrmTools.SolutionComponentsMover
             });
         }
 
+        private void clearLogsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            lvLogs.Items.Clear();
+        }
+
+        private void exportLogsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                Filter = @"CSV file|*.csv"
+            };
+
+            if (sfd.ShowDialog(this) == DialogResult.OK)
+            {
+                lvLogs.ToCsv(sfd.FileName);
+            }
+        }
+
         private void lvLogs_Resize(object sender, EventArgs e)
         {
             chMessage.Width = lvLogs.Width;
@@ -85,9 +103,9 @@ namespace MsCrmTools.SolutionComponentsMover
             {
                 SourceSolutions = sourceSolutionPicker.SelectedSolutions,
                 TargetSolutions = targetSolutionPicker.SelectedSolutions,
-                ConnectionDetail = ConnectionDetail
+                ConnectionDetail = ConnectionDetail,
+                CheckBestPractice = chkCheckBestPractice.Checked
             };
-
             var csForm = new ComponentTypeSelector(_omc);
             if (csForm.ShowDialog(ParentForm) == DialogResult.OK)
             {
@@ -104,7 +122,7 @@ namespace MsCrmTools.SolutionComponentsMover
                 AsyncArgument = settings,
                 Work = (bw, evt) =>
                 {
-                    sManager.CopyComponents((CopySettings)evt.Argument, bw);
+                    sManager.CopyComponents((CopySettings)evt.Argument, _omc, bw);
                 },
                 PostWorkCallBack = evt =>
                 {

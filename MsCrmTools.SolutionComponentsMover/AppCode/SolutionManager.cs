@@ -1,5 +1,8 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -40,11 +43,33 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
             return service.RetrieveMultiple(qe).Entities;
         }
 
-        internal void CopyComponents(CopySettings settings, BackgroundWorker backgroundWorker)
+        internal void CopyComponents(CopySettings settings, OptionMetadataCollection omc, BackgroundWorker backgroundWorker)
         {
             backgroundWorker.ReportProgress(0, "Retrieving source solution(s) components...");
 
             var components = RetrieveComponentsFromSolutions(settings.SourceSolutions.Select(s => s.Id).ToList(), settings.ComponentsTypes);
+
+            var entityComponents = components.Where(c =>
+                c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1
+                && c.GetAttributeValue<OptionSetValue>("rootcomponentbehavior").Value == 0
+                && (bool)c.GetAttributeValue<AliasedValue>("solution.ismanaged").Value == false).ToList();
+
+            if (entityComponents.Any() && settings.CheckBestPractice)
+            {
+                backgroundWorker.ReportProgress(0, "Analyzing entities components behavior...");
+                var emds = GetManagedEntities(entityComponents.Select(ec => ec.GetAttributeValue<Guid>("objectid"))
+                    .ToArray());
+
+                if (emds.Any())
+                {
+                    throw new Exception($@"Best practices are not respected!
+
+Managed entities should not be added in unmanaged solutions with all their assets.
+
+Remove best practice check if you really want to copy the following entities to the target solution(s):
+{string.Join(Environment.NewLine, emds.OrderBy(e => e.DisplayName?.UserLocalizedLabel?.Label).Select(e => "- " + e.DisplayName?.UserLocalizedLabel?.Label))}");
+                }
+            }
 
             foreach (var target in settings.TargetSolutions)
             {
@@ -53,9 +78,9 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
 
                 AddSolutionComponentRequest request = new AddSolutionComponentRequest();
 
-                try
+                foreach (var component in components)
                 {
-                    foreach (var component in components)
+                    try
                     {
                         request = new AddSolutionComponentRequest
                         {
@@ -75,13 +100,13 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
 
                         service.Execute(request);
                         backgroundWorker.ReportProgress(1,
-                            $"Component {request.ComponentId} of type {request.ComponentType} successfully added to solution '{request.SolutionUniqueName}'");
+                            $"Component {request.ComponentId} of type {omc.First(o => o.Value == request.ComponentType).Label?.UserLocalizedLabel?.Label} successfully added to solution '{request.SolutionUniqueName}'");
                     }
-                }
-                catch (Exception error)
-                {
-                    backgroundWorker.ReportProgress(-1,
-                        $"Error when adding component {request.ComponentId} of type {request.ComponentType} to solution '{request.SolutionUniqueName}' : {error.Message}");
+                    catch (Exception error)
+                    {
+                        backgroundWorker.ReportProgress(-1,
+                            $"Error when adding component {request.ComponentId} of type {omc.First(o => o.Value == request.ComponentType).Label?.UserLocalizedLabel?.Label} to solution '{request.SolutionUniqueName}' : {error.Message}");
+                    }
                 }
             }
         }
@@ -98,10 +123,56 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
                         new ConditionExpression("solutionid", ConditionOperator.In, solutionsIds.ToArray()),
                         new ConditionExpression("componenttype", ConditionOperator.In, componentsTypes.ToArray())
                     }
+                },
+                LinkEntities =
+                {
+                    new LinkEntity
+                    {
+                        LinkFromEntityName = "solutioncomponent",
+                        LinkFromAttributeName = "solutionid",
+                        LinkToAttributeName = "solutionid",
+                        LinkToEntityName = "solution",
+                        EntityAlias = "solution",
+                        Columns = new ColumnSet("ismanaged")
+                    }
                 }
             };
 
             return service.RetrieveMultiple(qe).Entities.ToList();
+        }
+
+        private List<EntityMetadata> GetManagedEntities(params Guid[] ids)
+        {
+            EntityQueryExpression entityQueryExpressionFull = new EntityQueryExpression
+            {
+                Properties = new MetadataPropertiesExpression
+                {
+                    AllProperties = false,
+                    PropertyNames =
+                    {
+                        "DisplayName",
+                        "LogicalName",
+                        "SchemaName",
+                    }
+                },
+                Criteria = new MetadataFilterExpression
+                {
+                    Conditions =
+                    {
+                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.In, ids),
+                        new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, true)
+                    }
+                }
+            };
+
+            RetrieveMetadataChangesRequest request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpressionFull,
+                ClientVersionStamp = null
+            };
+
+            var fullResponse = (RetrieveMetadataChangesResponse)service.Execute(request);
+            return fullResponse.EntityMetadata.ToList();
         }
     }
 }
