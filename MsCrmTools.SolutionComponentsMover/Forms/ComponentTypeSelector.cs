@@ -1,8 +1,10 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Label = Microsoft.Xrm.Sdk.Label;
 
 namespace MsCrmTools.SolutionComponentsMover.Forms
 {
@@ -70,6 +72,12 @@ namespace MsCrmTools.SolutionComponentsMover.Forms
 
         private void ComponentTypeSelector_Load(object sender, EventArgs e)
         {
+            if (_omc.All(o => o.Value != 80))
+            {
+                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Model driven app", -1) };
+                _omc.Add(new OptionMetadata(lb, 80));
+            }
+
             foreach (var omd in _omc)
             {
                 lvTypes.Items.Add(new ListViewItem(omd.Label?.UserLocalizedLabel?.Label) { Tag = omd.Value, Checked = true });
