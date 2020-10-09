@@ -29,7 +29,7 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
             get { return lvSolutions.SelectedItems.Cast<ListViewItem>().Select(i => (Entity)i.Tag).ToList(); }
         }
 
-        public IOrganizationService Service { set => service = value; }
+        public IOrganizationService Service { set { service = value; } }
 
         public void LoadSolutions(IEnumerable<Entity> solutions)
         {
@@ -50,6 +50,7 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
                 item.SubItems.Add(solution.GetAttributeValue<string>("uniquename"));
                 item.SubItems.Add(solution.GetAttributeValue<EntityReference>("publisherid").Name);
                 item.SubItems.Add(solution.GetAttributeValue<DateTime>("installedon").ToShortDateString());
+                item.SubItems.Add(solution.GetAttributeValue<string>("version"));
                 item.Tag = solution;
 
                 list.Add(item);
