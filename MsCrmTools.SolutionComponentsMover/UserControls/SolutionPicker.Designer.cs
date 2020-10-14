@@ -32,6 +32,8 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvSolutions
@@ -39,18 +41,21 @@
             this.lvSolutions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
-            this.columnHeader3});
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
             this.lvSolutions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvSolutions.FullRowSelect = true;
             this.lvSolutions.HideSelection = false;
             this.lvSolutions.Location = new System.Drawing.Point(0, 0);
-            this.lvSolutions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lvSolutions.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.lvSolutions.Name = "lvSolutions";
-            this.lvSolutions.Size = new System.Drawing.Size(724, 1142);
+            this.lvSolutions.Size = new System.Drawing.Size(362, 594);
             this.lvSolutions.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvSolutions.TabIndex = 0;
             this.lvSolutions.UseCompatibleStateImageBehavior = false;
             this.lvSolutions.View = System.Windows.Forms.View.Details;
+            this.lvSolutions.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LvSolutions_ColumnClick);
             this.lvSolutions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvSolutions_MouseDoubleClick);
             // 
             // columnHeader1
@@ -68,15 +73,24 @@
             this.columnHeader3.Text = "Publisher";
             this.columnHeader3.Width = 150;
             // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed date";
+            this.columnHeader4.Width = 80;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Version";
+            // 
             // SolutionPicker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.lvSolutions);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "SolutionPicker";
-            this.Size = new System.Drawing.Size(724, 1142);
+            this.Size = new System.Drawing.Size(362, 594);
             this.ResumeLayout(false);
 
         }
@@ -87,5 +101,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
