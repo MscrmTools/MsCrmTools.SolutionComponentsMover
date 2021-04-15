@@ -1,17 +1,19 @@
 ﻿using Microsoft.Xrm.Sdk;
 using MsCrmTools.SolutionComponentsMover.AppCode;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MsCrmTools.SolutionComponentsMover.UserControls
 {
     public partial class SolutionPicker : UserControl
     {
+        private readonly List<ListViewItem> _items = new List<ListViewItem>();
+        private ListViewColumnSorter lvColumnSorter;
+        private Thread searchThread;
         private IOrganizationService service;
-        private ListViewColumnSorter lvColumnSorter; 
 
         public SolutionPicker()
         {
@@ -35,8 +37,6 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
         {
             lvSolutions.Items.Clear();
 
-            var list = new List<ListViewItem>();
-
             IEnumerable<Entity> solutionsToDisplay = solutions;
 
             if (!CanDisplayManagedSolutions)
@@ -53,16 +53,24 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
                 item.SubItems.Add(solution.GetAttributeValue<string>("version"));
                 item.Tag = solution;
 
-                list.Add(item);
+                _items.Add(item);
             }
 
-            lvSolutions.Items.AddRange(list.ToArray());
+            lvSolutions.Items.AddRange(_items.ToArray());
         }
 
-        private void lvSolutions_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void DisplaySolutions()
         {
-            if (lvSolutions.SelectedItems.Count == 1)
-                OnSolutionSelected?.Invoke(this, new SolutionSelectedEventArgs((Entity)lvSolutions.SelectedItems.Cast<ListViewItem>().First().Tag));
+            Invoke(new Action(() =>
+            {
+                lvSolutions.Items.Clear();
+
+                lvSolutions.Items.AddRange(_items
+                    .Where(i => i.Text.ToLower().Contains(txtFilter.Text.ToLower())
+                     || i.SubItems.Cast<ListViewItem.ListViewSubItem>().Any(s => s.Text.ToLower().Contains(txtFilter.Text.ToLower()))
+                    )
+                    .ToArray());
+            }));
         }
 
         private void LvSolutions_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -90,7 +98,18 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
             // Perform the sort with these new sort options.
             this.lvSolutions.Sort();
         }
-    }
 
- 
+        private void lvSolutions_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lvSolutions.SelectedItems.Count == 1)
+                OnSolutionSelected?.Invoke(this, new SolutionSelectedEventArgs((Entity)lvSolutions.SelectedItems.Cast<ListViewItem>().First().Tag));
+        }
+
+        private void txtFilter_TextChanged(object sender, EventArgs e)
+        {
+            searchThread?.Abort();
+            searchThread = new Thread(DisplaySolutions);
+            searchThread.Start();
+        }
+    }
 }
