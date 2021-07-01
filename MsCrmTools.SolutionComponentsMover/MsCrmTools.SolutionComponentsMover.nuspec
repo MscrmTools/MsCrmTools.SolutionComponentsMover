@@ -17,7 +17,7 @@
       <dependency id="XrmToolBox" version="1.2016.4.28" />
     </dependencies>
   </metadata>
-     <files>
-        <file src="bin\Release\MsCrmTools.SolutionComponentsMover.dll" target="lib\net452\Plugins" />
-    </files>
+  <files>
+    <file src="bin\Release\Plugins\MsCrmTools.SolutionComponentsMover.dll" target="lib\net452\Plugins" />
+  </files>
 </package>
