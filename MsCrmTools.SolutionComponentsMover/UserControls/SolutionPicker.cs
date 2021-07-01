@@ -36,6 +36,7 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
         public void LoadSolutions(IEnumerable<Entity> solutions)
         {
             lvSolutions.Items.Clear();
+            _items.Clear();
 
             IEnumerable<Entity> solutionsToDisplay = solutions;
 

@@ -80,7 +80,7 @@ namespace MsCrmTools.SolutionComponentsMover.Forms
 
             foreach (var omd in _omc)
             {
-                lvTypes.Items.Add(new ListViewItem(omd.Label?.UserLocalizedLabel?.Label) { Tag = omd.Value, Checked = true });
+                lvTypes.Items.Add(new ListViewItem(omd.Label?.UserLocalizedLabel?.Label ?? omd.Label.LocalizedLabels.FirstOrDefault()?.Label) { Tag = omd.Value, Checked = true });
             }
         }
 
