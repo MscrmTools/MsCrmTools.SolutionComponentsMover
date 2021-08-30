@@ -78,7 +78,25 @@ namespace MsCrmTools.SolutionComponentsMover.Forms
                 _omc.Add(new OptionMetadata(lb, 80));
             }
 
-            foreach (var omd in _omc)
+            if (_omc.All(o => o.Value != 10270))
+            {
+                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Custom API", -1) };
+                _omc.Add(new OptionMetadata(lb, 10270));
+            }
+
+            if (_omc.All(o => o.Value != 10271))
+            {
+                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Custom API Request Parameter", -1) };
+                _omc.Add(new OptionMetadata(lb, 10271));
+            }
+
+            if (_omc.All(o => o.Value != 810272))
+            {
+                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Custom API Response Parameter", -1) };
+                _omc.Add(new OptionMetadata(lb, 810272));
+            }
+
+            foreach (var omd in _omc.OrderBy(o => o.Label?.UserLocalizedLabel?.Label ?? o.Label.LocalizedLabels.FirstOrDefault()?.Label))
             {
                 lvTypes.Items.Add(new ListViewItem(omd.Label?.UserLocalizedLabel?.Label ?? omd.Label.LocalizedLabels.FirstOrDefault()?.Label) { Tag = omd.Value, Checked = true });
             }
