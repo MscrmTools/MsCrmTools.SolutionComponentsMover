@@ -11,5 +11,6 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
         public ConnectionDetail ConnectionDetail { get; internal set; }
         public List<Entity> SourceSolutions { get; set; }
         public List<Entity> TargetSolutions { get; set; }
+        public bool AllComponents { get; internal set; }
     }
 }

@@ -4,21 +4,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Label = Microsoft.Xrm.Sdk.Label;
 
 namespace MsCrmTools.SolutionComponentsMover.Forms
 {
     public partial class ComponentTypeSelector : Form
     {
+        private readonly EntityMetadataCollection _emc;
         private readonly OptionMetadataCollection _omc;
+        private readonly List<Entity> _solutionComponents;
+        private bool isOnline;
 
         public ComponentTypeSelector(OptionMetadataCollection omc)
         {
             InitializeComponent();
-
+            isOnline = false;
             _omc = omc;
         }
 
+        public ComponentTypeSelector(EntityMetadataCollection emc, List<Entity> solutionComponents)
+        {
+            InitializeComponent();
+
+            _emc = emc;
+            _solutionComponents = solutionComponents;
+            isOnline = true;
+        }
+
+        public ComponentTypeSelector(OptionMetadataCollection omc, EntityMetadataCollection emc, List<Entity> solutionComponents)
+        {
+            InitializeComponent();
+
+            _omc = omc;
+            _emc = emc;
+            _solutionComponents = solutionComponents;
+            isOnline = true;
+        }
+
+        public bool AllItemsSelected { get; private set; }
         public List<int> SelectedComponents { get; private set; }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -31,29 +53,7 @@ namespace MsCrmTools.SolutionComponentsMover.Forms
             SelectedComponents = new List<int>();
             SelectedComponents.AddRange(lvTypes.CheckedItems.Cast<ListViewItem>().Select(i => (int)i.Tag));
 
-            //foreach (var ctrl in Controls)
-            //{
-            //    var chk = ctrl as CheckBox;
-            //    if (chk != null && chk != chkAll && (chk.Checked || chkAll.Checked))
-            //    {
-            //        SelectedComponents.Add(int.Parse(chk.Tag.ToString()));
-            //    }
-            //}
-
-            //if (SelectedComponents.Contains(1))
-            //{
-            //    SelectedComponents.AddRange(new List<int> {
-            //        2, // Attribut
-            //        10, // Relationship
-            //        14, // Key
-            //        22, // Display string
-            //        24, // Form
-            //        26, // View
-            //        59, // Chart
-            //        60, // System Form
-            //        65, // Hierarchical rules
-            //    });
-            //}
+            AllItemsSelected = lvTypes.CheckedItems.Count == lvTypes.Items.Count;
 
             Close();
         }
@@ -72,33 +72,27 @@ namespace MsCrmTools.SolutionComponentsMover.Forms
 
         private void ComponentTypeSelector_Load(object sender, EventArgs e)
         {
-            if (_omc.All(o => o.Value != 80))
+            if (isOnline)
             {
-                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Model driven app", -1) };
-                _omc.Add(new OptionMetadata(lb, 80));
+                foreach (var component in _solutionComponents)
+                {
+                    var entity = _emc.First(emd => emd.LogicalName == component.GetAttributeValue<string>("primaryentityname"));
+
+                    lvTypes.Items.Add(new ListViewItem(entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.SchemaName) { Tag = component.GetAttributeValue<int>("objecttypecode"), Checked = true });
+                }
             }
 
-            if (_omc.All(o => o.Value != 10270))
+            if (lvTypes.Items.Cast<ListViewItem>().All(o => (int)o.Tag != 80))
             {
-                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Custom API", -1) };
-                _omc.Add(new OptionMetadata(lb, 10270));
+                lvTypes.Items.Add(new ListViewItem("Model driven app") { Tag = 80, Checked = true });
             }
 
-            if (_omc.All(o => o.Value != 10271))
+            foreach (var omd in _omc)
             {
-                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Custom API Request Parameter", -1) };
-                _omc.Add(new OptionMetadata(lb, 10271));
-            }
-
-            if (_omc.All(o => o.Value != 810272))
-            {
-                var lb = new Label { UserLocalizedLabel = new LocalizedLabel("Custom API Response Parameter", -1) };
-                _omc.Add(new OptionMetadata(lb, 10272));
-            }
-
-            foreach (var omd in _omc.OrderBy(o => o.Label?.UserLocalizedLabel?.Label ?? o.Label.LocalizedLabels.FirstOrDefault()?.Label))
-            {
-                lvTypes.Items.Add(new ListViewItem(omd.Label?.UserLocalizedLabel?.Label ?? omd.Label.LocalizedLabels.FirstOrDefault()?.Label) { Tag = omd.Value, Checked = true });
+                if (lvTypes.Items.Cast<ListViewItem>().All(o => (int)o.Tag != omd.Value))
+                {
+                    lvTypes.Items.Add(new ListViewItem(omd.Label?.UserLocalizedLabel?.Label ?? omd.Label.LocalizedLabels.FirstOrDefault()?.Label) { Tag = omd.Value, Checked = true });
+                }
             }
         }
 

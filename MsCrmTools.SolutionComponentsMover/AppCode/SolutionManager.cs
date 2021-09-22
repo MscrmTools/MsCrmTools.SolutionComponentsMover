@@ -43,11 +43,11 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
             return service.RetrieveMultiple(qe).Entities;
         }
 
-        internal void CopyComponents(CopySettings settings, OptionMetadataCollection omc, BackgroundWorker backgroundWorker)
+        internal void CopyComponents(CopySettings settings, OptionMetadataCollection omc, EntityMetadataCollection emds, List<Entity> solutionComponents, bool isOnline, BackgroundWorker backgroundWorker)
         {
             backgroundWorker.ReportProgress(0, "Retrieving source solution(s) components...");
 
-            var components = RetrieveComponentsFromSolutions(settings.SourceSolutions.Select(s => s.Id).ToList(), settings.ComponentsTypes);
+            var components = RetrieveComponentsFromSolutions(settings.SourceSolutions.Select(s => s.Id).ToList(), settings.ComponentsTypes, settings.AllComponents);
 
             var entityComponents = components.Where(c =>
                 c.GetAttributeValue<OptionSetValue>("componenttype").Value == 1
@@ -57,10 +57,10 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
             if (entityComponents.Any() && settings.CheckBestPractice)
             {
                 backgroundWorker.ReportProgress(0, "Analyzing entities components behavior...");
-                var emds = GetManagedEntities(entityComponents.Select(ec => ec.GetAttributeValue<Guid>("objectid"))
+                var managedEmds = GetManagedEntities(entityComponents.Select(ec => ec.GetAttributeValue<Guid>("objectid"))
                     .ToArray());
 
-                if (emds.Any())
+                if (managedEmds.Any())
                 {
                     throw new Exception($@"Best practices are not respected!
 
@@ -80,6 +80,24 @@ Remove best practice check if you really want to copy the following entities to 
 
                 foreach (var component in components)
                 {
+                    string componentName;
+                    if (isOnline)
+                    {
+                        var entity = emds.FirstOrDefault(emd => emd.LogicalName == solutionComponents.FirstOrDefault(x => x.GetAttributeValue<int>("objecttypecode") == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.GetAttributeValue<string>("primaryentityname"));
+                        if (entity == null)
+                        {
+                            componentName = omc.First(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value).Label?.UserLocalizedLabel?.Label;
+                        }
+                        else
+                        {
+                            componentName = entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.SchemaName;
+                        }
+                    }
+                    else
+                    {
+                        componentName = omc.First(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value).Label?.UserLocalizedLabel?.Label;
+                    }
+
                     try
                     {
                         request = new AddSolutionComponentRequest
@@ -99,19 +117,20 @@ Remove best practice check if you really want to copy the following entities to 
                         }
 
                         service.Execute(request);
+
                         backgroundWorker.ReportProgress(1,
-                            $"Component {request.ComponentId} of type {omc.First(o => o.Value == request.ComponentType).Label?.UserLocalizedLabel?.Label} successfully added to solution '{request.SolutionUniqueName}'");
+                            $"Component {request.ComponentId} of type {componentName} successfully added to solution '{request.SolutionUniqueName}'");
                     }
                     catch (Exception error)
                     {
                         backgroundWorker.ReportProgress(-1,
-                            $"Error when adding component {request.ComponentId} of type {omc.First(o => o.Value == request.ComponentType).Label?.UserLocalizedLabel?.Label} to solution '{request.SolutionUniqueName}' : {error.Message}");
+                            $"Error when adding component {request.ComponentId} of type {componentName} to solution '{request.SolutionUniqueName}' : {error.Message}");
                     }
                 }
             }
         }
 
-        internal List<Entity> RetrieveComponentsFromSolutions(List<Guid> solutionsIds, List<int> componentsTypes)
+        internal List<Entity> RetrieveComponentsFromSolutions(List<Guid> solutionsIds, List<int> componentsTypes, bool allComponents)
         {
             var qe = new QueryExpression("solutioncomponent")
             {
@@ -120,8 +139,7 @@ Remove best practice check if you really want to copy the following entities to 
                 {
                     Conditions =
                     {
-                        new ConditionExpression("solutionid", ConditionOperator.In, solutionsIds.ToArray()),
-                        new ConditionExpression("componenttype", ConditionOperator.In, componentsTypes.ToArray())
+                        new ConditionExpression("solutionid", ConditionOperator.In, solutionsIds.ToArray())
                     }
                 },
                 LinkEntities =
@@ -137,6 +155,11 @@ Remove best practice check if you really want to copy the following entities to 
                     }
                 }
             };
+
+            if (!allComponents)
+            {
+                qe.Criteria.AddCondition("componenttype", ConditionOperator.In, componentsTypes.ToArray());
+            }
 
             return service.RetrieveMultiple(qe).Entities.ToList();
         }

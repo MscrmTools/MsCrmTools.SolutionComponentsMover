@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.SolutionComponentsMover.AppCode;
 using MsCrmTools.SolutionComponentsMover.Forms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -15,7 +17,9 @@ namespace MsCrmTools.SolutionComponentsMover
 {
     public partial class MainControl : PluginControlBase, IGitHubPlugin, IHelpPlugin
     {
+        private EntityMetadataCollection _emc;
         private OptionMetadataCollection _omc;
+        private List<Entity> _solutionComponents;
         private SolutionManager sManager;
 
         public MainControl()
@@ -45,7 +49,21 @@ namespace MsCrmTools.SolutionComponentsMover
                         {
                             Name = "componenttype"
                         })).OptionSetMetadata).Options;
-                    //_omc
+
+                    _emc = MetadataHelper.LoadEntities(Service);
+
+                    _solutionComponents = Service.RetrieveMultiple(new QueryExpression("solutioncomponentdefinition")
+                    {
+                        NoLock = true,
+                        ColumnSet = new ColumnSet("objecttypecode", "primaryentityname"),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("canbeaddedtosolutioncomponents", ConditionOperator.Equal, true)
+                            }
+                        }
+                    }).Entities.ToList();
                 },
                 PostWorkCallBack = e =>
                 {
@@ -106,10 +124,21 @@ namespace MsCrmTools.SolutionComponentsMover
                 ConnectionDetail = ConnectionDetail,
                 CheckBestPractice = chkCheckBestPractice.Checked
             };
-            var csForm = new ComponentTypeSelector(_omc);
+
+            ComponentTypeSelector csForm;
+            if (ConnectionDetail.UseOnline)
+            {
+                csForm = new ComponentTypeSelector(_omc, _emc, _solutionComponents);
+            }
+            else
+            {
+                csForm = new ComponentTypeSelector(_omc);
+            }
+
             if (csForm.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 settings.ComponentsTypes = csForm.SelectedComponents;
+                settings.AllComponents = csForm.AllItemsSelected;
             }
             else
             {
@@ -122,7 +151,7 @@ namespace MsCrmTools.SolutionComponentsMover
                 AsyncArgument = settings,
                 Work = (bw, evt) =>
                 {
-                    sManager.CopyComponents((CopySettings)evt.Argument, _omc, bw);
+                    sManager.CopyComponents((CopySettings)evt.Argument, _omc, _emc, _solutionComponents, ConnectionDetail.UseOnline, bw);
                 },
                 PostWorkCallBack = evt =>
                 {

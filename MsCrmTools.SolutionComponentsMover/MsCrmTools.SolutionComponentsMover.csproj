@@ -155,6 +155,7 @@
     <Compile Include="AppCode\CopySettings.cs" />
     <Compile Include="AppCode\ListViewColumnSorter.cs" />
     <Compile Include="AppCode\ListViewToCsv.cs" />
+    <Compile Include="AppCode\MetadataHelper.cs" />
     <Compile Include="AppCode\SolutionManager.cs" />
     <Compile Include="AppCode\SolutionSelectedEventArgs.cs" />
     <Compile Include="Forms\ComponentTypeSelector.cs">
@@ -206,7 +207,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
