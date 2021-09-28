@@ -86,7 +86,7 @@ Remove best practice check if you really want to copy the following entities to 
                         var entity = emds.FirstOrDefault(emd => emd.LogicalName == solutionComponents.FirstOrDefault(x => x.GetAttributeValue<int>("objecttypecode") == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.GetAttributeValue<string>("primaryentityname"));
                         if (entity == null)
                         {
-                            componentName = omc.First(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value).Label?.UserLocalizedLabel?.Label;
+                            componentName = omc.FirstOrDefault(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.Label?.UserLocalizedLabel?.Label;
                         }
                         else
                         {
@@ -95,7 +95,12 @@ Remove best practice check if you really want to copy the following entities to 
                     }
                     else
                     {
-                        componentName = omc.First(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value).Label?.UserLocalizedLabel?.Label;
+                        componentName = omc.FirstOrDefault(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.Label?.UserLocalizedLabel?.Label;
+                    }
+
+                    if (componentName == null)
+                    {
+                        componentName = $"No label (code:{component.GetAttributeValue<OptionSetValue>("componenttype").Value})";
                     }
 
                     try
@@ -158,7 +163,9 @@ Remove best practice check if you really want to copy the following entities to 
 
             if (!allComponents)
             {
-                qe.Criteria.AddCondition("componenttype", ConditionOperator.In, componentsTypes.ToArray());
+                var ce = new ConditionExpression("componenttype", ConditionOperator.In, componentsTypes);
+
+                qe.Criteria.Conditions.Add(ce);
             }
 
             return service.RetrieveMultiple(qe).Entities.ToList();
