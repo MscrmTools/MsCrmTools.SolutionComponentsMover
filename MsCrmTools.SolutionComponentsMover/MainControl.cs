@@ -52,18 +52,21 @@ namespace MsCrmTools.SolutionComponentsMover
 
                     _emc = MetadataHelper.LoadEntities(Service);
 
-                    _solutionComponents = Service.RetrieveMultiple(new QueryExpression("solutioncomponentdefinition")
+                    if (ConnectionDetail.OrganizationMajorVersion >= 9 && ConnectionDetail.OrganizationMinorVersion >= 1)
                     {
-                        NoLock = true,
-                        ColumnSet = new ColumnSet("objecttypecode", "primaryentityname"),
-                        Criteria = new FilterExpression
+                        _solutionComponents = Service.RetrieveMultiple(new QueryExpression("solutioncomponentdefinition")
                         {
-                            Conditions =
+                            NoLock = true,
+                            ColumnSet = new ColumnSet("objecttypecode", "primaryentityname"),
+                            Criteria = new FilterExpression
+                            {
+                                Conditions =
                             {
                                 new ConditionExpression("canbeaddedtosolutioncomponents", ConditionOperator.Equal, true)
                             }
-                        }
-                    }).Entities.ToList();
+                            }
+                        }).Entities.ToList();
+                    }
                 },
                 PostWorkCallBack = e =>
                 {
@@ -126,7 +129,7 @@ namespace MsCrmTools.SolutionComponentsMover
             };
 
             ComponentTypeSelector csForm;
-            if (ConnectionDetail.UseOnline)
+            if (ConnectionDetail.OrganizationMajorVersion >= 9 && ConnectionDetail.OrganizationMinorVersion >= 1)
             {
                 csForm = new ComponentTypeSelector(_omc, _emc, _solutionComponents);
             }
