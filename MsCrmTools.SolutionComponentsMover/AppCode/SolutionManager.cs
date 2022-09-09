@@ -168,7 +168,25 @@ Remove best practice check if you really want to copy the following entities to 
                 qe.Criteria.Conditions.Add(ce);
             }
 
-            return service.RetrieveMultiple(qe).Entities.ToList();
+            var queryResult = new List<Entity>();
+            EntityCollection pageResult;
+
+            do
+            {
+                pageResult = service.RetrieveMultiple(qe);
+
+                queryResult.AddRange(pageResult.Entities);
+
+                // prepare next request
+                if (pageResult.MoreRecords)
+                {
+                    qe.PageInfo.PageNumber++;
+                    qe.PageInfo.PagingCookie = pageResult.PagingCookie;
+                }
+            }
+            while (pageResult.MoreRecords);
+
+            return queryResult;
         }
 
         private List<EntityMetadata> GetManagedEntities(params Guid[] ids)

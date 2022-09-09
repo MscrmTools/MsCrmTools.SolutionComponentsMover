@@ -11,7 +11,7 @@
     <iconUrl>https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/logo_0100.png</iconUrl>
     <description>Transfer solution components across solutions</description>
     <summary>Transfer solution components across solutions</summary>
-    <releaseNotes>Bug fix when selecting specific component types for OnPremise deployments</releaseNotes>
+    <releaseNotes>Allow retrieve of more than 5000 records</releaseNotes>
     <tags>XrmToolBox Plugin SolutionComponentMover</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2016.4.28" />
