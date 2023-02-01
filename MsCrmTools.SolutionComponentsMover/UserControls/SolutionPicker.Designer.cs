@@ -37,6 +37,7 @@
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.lblFilter = new System.Windows.Forms.Label();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +48,8 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader6});
             this.lvSolutions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvSolutions.FullRowSelect = true;
             this.lvSolutions.HideSelection = false;
@@ -115,6 +117,10 @@
             this.lblFilter.Text = "Filter";
             this.lblFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Managed";
+            // 
             // SolutionPicker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -142,5 +148,6 @@
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.TextBox txtFilter;
         private System.Windows.Forms.Label lblFilter;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
     }
 }
