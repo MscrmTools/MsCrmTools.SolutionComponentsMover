@@ -62,12 +62,14 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
 
                 if (managedEmds.Any())
                 {
-                    throw new Exception($@"Best practices are not respected!
+                    string entityList = string.Join(Environment.NewLine, emds.OrderBy(e => e.DisplayName?.UserLocalizedLabel?.Label).Take(10).Select(e => "- " + e.DisplayName?.UserLocalizedLabel?.Label)) + (managedEmds.Count > 10 ? Environment.NewLine + "- and more..." : "");
+                    string message = $@"Best practices are not respected!
 
 Managed entities should not be added in unmanaged solutions with all their assets.
 
 Remove best practice check if you really want to copy the following entities to the target solution(s):
-{string.Join(Environment.NewLine, emds.OrderBy(e => e.DisplayName?.UserLocalizedLabel?.Label).Select(e => "- " + e.DisplayName?.UserLocalizedLabel?.Label))}");
+{entityList}";
+                    throw new Exception(message);
                 }
             }
 
