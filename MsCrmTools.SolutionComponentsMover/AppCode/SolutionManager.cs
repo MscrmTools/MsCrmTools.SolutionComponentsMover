@@ -62,7 +62,7 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
 
                 if (managedEmds.Any())
                 {
-                    string entityList = string.Join(Environment.NewLine, emds.OrderBy(e => e.DisplayName?.UserLocalizedLabel?.Label).Take(10).Select(e => "- " + e.DisplayName?.UserLocalizedLabel?.Label)) + (managedEmds.Count > 10 ? Environment.NewLine + "- and more..." : "");
+                    string entityList = string.Join(Environment.NewLine, emds.OrderBy(e => e.DisplayName?.UserLocalizedLabel?.Label ?? e.SchemaName).Take(10).Select(e => "- " + e.DisplayName?.UserLocalizedLabel?.Label ?? e.SchemaName)) + (managedEmds.Count > 10 ? Environment.NewLine + "- and more..." : "");
                     string message = $@"Best practices are not respected!
 
 Managed entities should not be added in unmanaged solutions with all their assets.
