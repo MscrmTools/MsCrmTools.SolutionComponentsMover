@@ -57,7 +57,7 @@ namespace MsCrmTools.SolutionComponentsMover
                         _solutionComponents = Service.RetrieveMultiple(new QueryExpression("solutioncomponentdefinition")
                         {
                             NoLock = true,
-                            ColumnSet = new ColumnSet("objecttypecode", "primaryentityname"),
+                            ColumnSet = new ColumnSet("solutioncomponenttype", "primaryentityname"),
                             Criteria = new FilterExpression
                             {
                                 Conditions =
