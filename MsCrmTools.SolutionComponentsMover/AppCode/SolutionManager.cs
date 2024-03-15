@@ -85,7 +85,7 @@ Remove best practice check if you really want to copy the following entities to 
                     string componentName;
                     if (isOnline)
                     {
-                        var entity = emds.FirstOrDefault(emd => emd.LogicalName == solutionComponents.FirstOrDefault(x => x.GetAttributeValue<int>("objecttypecode") == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.GetAttributeValue<string>("primaryentityname"));
+                        var entity = emds.FirstOrDefault(emd => emd.LogicalName == solutionComponents.FirstOrDefault(x => x.GetAttributeValue<int>("solutioncomponenttype") == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.GetAttributeValue<string>("primaryentityname"));
                         if (entity == null)
                         {
                             componentName = omc.FirstOrDefault(o => o.Value == component.GetAttributeValue<OptionSetValue>("componenttype").Value)?.Label?.UserLocalizedLabel?.Label;
