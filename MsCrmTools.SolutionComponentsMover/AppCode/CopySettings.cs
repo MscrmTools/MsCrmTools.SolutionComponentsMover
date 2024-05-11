@@ -7,6 +7,7 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
     internal class CopySettings
     {
         public bool CheckBestPractice { get; set; }
+        public bool CheckOnlySourceComponentTypes { get; set; }
         public List<int> ComponentsTypes { get; set; }
         public ConnectionDetail ConnectionDetail { get; internal set; }
         public List<Entity> SourceSolutions { get; set; }
