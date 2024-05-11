@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.SolutionComponentsMover.AppCode;
 using MsCrmTools.SolutionComponentsMover.Forms;
 using System;
+using System.Activities.Presentation.Debug;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -125,19 +126,24 @@ namespace MsCrmTools.SolutionComponentsMover
                 SourceSolutions = sourceSolutionPicker.SelectedSolutions,
                 TargetSolutions = targetSolutionPicker.SelectedSolutions,
                 ConnectionDetail = ConnectionDetail,
-                CheckBestPractice = chkCheckBestPractice.Checked
+                CheckBestPractice = chkCheckBestPractice.Checked,
+                CheckOnlySourceComponentTypes = chkShowOnlySourceComponentTypes.Checked
             };
 
             ComponentTypeSelector csForm;
             if (ConnectionDetail.OrganizationMajorVersion >= 9 && ConnectionDetail.OrganizationMinorVersion >= 1)
             {
-                csForm = new ComponentTypeSelector(_omc, _emc, _solutionComponents);
+                List<Entity> componentTypes = _solutionComponents;
+                if (settings.CheckOnlySourceComponentTypes)
+                {
+                    componentTypes = sManager.RetrieveComponentsFromSolutions(settings.SourceSolutions.Select(s => s.Id).ToList(), settings.ComponentsTypes, true);
+                }
+                csForm = new ComponentTypeSelector(_omc, _emc, componentTypes, settings.CheckOnlySourceComponentTypes);
             }
             else
             {
                 csForm = new ComponentTypeSelector(_omc);
             }
-
             if (csForm.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 settings.ComponentsTypes = csForm.SelectedComponents;

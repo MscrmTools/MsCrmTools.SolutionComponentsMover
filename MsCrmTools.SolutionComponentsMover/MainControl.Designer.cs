@@ -52,6 +52,7 @@
             this.chMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlOptions = new System.Windows.Forms.Panel();
             this.chkCheckBestPractice = new System.Windows.Forms.CheckBox();
+            this.chkShowOnlySourceComponentTypes = new System.Windows.Forms.CheckBox();
             this.tsMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -81,7 +82,8 @@
             this.toolStripLabel1});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Size = new System.Drawing.Size(1439, 39);
+            this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.tsMain.Size = new System.Drawing.Size(720, 25);
             this.tsMain.TabIndex = 0;
             this.tsMain.Text = "tsMain";
             // 
@@ -91,35 +93,35 @@
             this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(36, 36);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
             this.tsbCloseThisTab.Text = "Close this tab";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.tsbCloseThisTab_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbLoadSolutions
             // 
             this.tsbLoadSolutions.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadSolutions.Image")));
             this.tsbLoadSolutions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadSolutions.Name = "tsbLoadSolutions";
-            this.tsbLoadSolutions.Size = new System.Drawing.Size(205, 36);
+            this.tsbLoadSolutions.Size = new System.Drawing.Size(104, 22);
             this.tsbLoadSolutions.Text = "Load solutions";
             this.tsbLoadSolutions.Click += new System.EventHandler(this.tsbLoadSolutions_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbCopyComponents
             // 
             this.tsbCopyComponents.Image = ((System.Drawing.Image)(resources.GetObject("tsbCopyComponents.Image")));
             this.tsbCopyComponents.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCopyComponents.Name = "tsbCopyComponents";
-            this.tsbCopyComponents.Size = new System.Drawing.Size(246, 36);
+            this.tsbCopyComponents.Size = new System.Drawing.Size(125, 22);
             this.tsbCopyComponents.Text = "Copy components";
             this.tsbCopyComponents.ToolTipText = "Copy components from selected source solution(s) to selected target solution(s)";
             this.tsbCopyComponents.Click += new System.EventHandler(this.tsbCopyComponents_Click);
@@ -127,7 +129,7 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // tsddbLogs
             // 
@@ -137,39 +139,39 @@
             this.tsddbLogs.Image = ((System.Drawing.Image)(resources.GetObject("tsddbLogs.Image")));
             this.tsddbLogs.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbLogs.Name = "tsddbLogs";
-            this.tsddbLogs.Size = new System.Drawing.Size(118, 36);
+            this.tsddbLogs.Size = new System.Drawing.Size(61, 22);
             this.tsddbLogs.Text = "Logs";
             // 
             // exportLogsToolStripMenuItem
             // 
             this.exportLogsToolStripMenuItem.Name = "exportLogsToolStripMenuItem";
-            this.exportLogsToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.exportLogsToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.exportLogsToolStripMenuItem.Text = "Export logs";
             this.exportLogsToolStripMenuItem.Click += new System.EventHandler(this.exportLogsToolStripMenuItem_Click);
             // 
             // clearLogsToolStripMenuItem
             // 
             this.clearLogsToolStripMenuItem.Name = "clearLogsToolStripMenuItem";
-            this.clearLogsToolStripMenuItem.Size = new System.Drawing.Size(324, 38);
+            this.clearLogsToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.clearLogsToolStripMenuItem.Text = "Clear logs";
             this.clearLogsToolStripMenuItem.Click += new System.EventHandler(this.clearLogsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(405, 36);
+            this.toolStripLabel1.Size = new System.Drawing.Size(198, 22);
             this.toolStripLabel1.Text = "Double click on a solution to open it";
             // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.splitContainer2.Name = "splitContainer2";
             // 
             // splitContainer2.Panel1
@@ -179,9 +181,9 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.gbTarget);
-            this.splitContainer2.Size = new System.Drawing.Size(1439, 518);
-            this.splitContainer2.SplitterDistance = 712;
-            this.splitContainer2.SplitterWidth = 5;
+            this.splitContainer2.Size = new System.Drawing.Size(720, 266);
+            this.splitContainer2.SplitterDistance = 356;
+            this.splitContainer2.SplitterWidth = 2;
             this.splitContainer2.TabIndex = 1;
             // 
             // gbSource
@@ -190,10 +192,10 @@
             this.gbSource.Controls.Add(this.sourceSolutionPicker);
             this.gbSource.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbSource.Location = new System.Drawing.Point(0, 0);
-            this.gbSource.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbSource.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gbSource.Name = "gbSource";
-            this.gbSource.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbSource.Size = new System.Drawing.Size(712, 518);
+            this.gbSource.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gbSource.Size = new System.Drawing.Size(356, 266);
             this.gbSource.TabIndex = 2;
             this.gbSource.TabStop = false;
             this.gbSource.Text = "Source solutions";
@@ -203,10 +205,10 @@
             this.sourceSolutionPicker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sourceSolutionPicker.CanDisplayManagedSolutions = true;
             this.sourceSolutionPicker.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sourceSolutionPicker.Location = new System.Drawing.Point(4, 29);
-            this.sourceSolutionPicker.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.sourceSolutionPicker.Location = new System.Drawing.Point(2, 16);
+            this.sourceSolutionPicker.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.sourceSolutionPicker.Name = "sourceSolutionPicker";
-            this.sourceSolutionPicker.Size = new System.Drawing.Size(704, 484);
+            this.sourceSolutionPicker.Size = new System.Drawing.Size(352, 247);
             this.sourceSolutionPicker.TabIndex = 1;
             this.sourceSolutionPicker.OnSolutionSelected += new System.EventHandler<MsCrmTools.SolutionComponentsMover.AppCode.SolutionSelectedEventArgs>(this.SolutionSelected);
             // 
@@ -216,10 +218,10 @@
             this.gbTarget.Controls.Add(this.targetSolutionPicker);
             this.gbTarget.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbTarget.Location = new System.Drawing.Point(0, 0);
-            this.gbTarget.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbTarget.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.gbTarget.Name = "gbTarget";
-            this.gbTarget.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbTarget.Size = new System.Drawing.Size(722, 518);
+            this.gbTarget.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.gbTarget.Size = new System.Drawing.Size(362, 266);
             this.gbTarget.TabIndex = 3;
             this.gbTarget.TabStop = false;
             this.gbTarget.Text = "Target solutions";
@@ -229,17 +231,18 @@
             this.targetSolutionPicker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.targetSolutionPicker.CanDisplayManagedSolutions = false;
             this.targetSolutionPicker.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.targetSolutionPicker.Location = new System.Drawing.Point(4, 29);
-            this.targetSolutionPicker.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.targetSolutionPicker.Location = new System.Drawing.Point(2, 16);
+            this.targetSolutionPicker.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.targetSolutionPicker.Name = "targetSolutionPicker";
-            this.targetSolutionPicker.Size = new System.Drawing.Size(714, 484);
+            this.targetSolutionPicker.Size = new System.Drawing.Size(358, 247);
             this.targetSolutionPicker.TabIndex = 2;
             this.targetSolutionPicker.OnSolutionSelected += new System.EventHandler<MsCrmTools.SolutionComponentsMover.AppCode.SolutionSelectedEventArgs>(this.SolutionSelected);
             // 
             // scMain
             // 
             this.scMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scMain.Location = new System.Drawing.Point(0, 79);
+            this.scMain.Location = new System.Drawing.Point(0, 46);
+            this.scMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.scMain.Name = "scMain";
             this.scMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -250,8 +253,9 @@
             // scMain.Panel2
             // 
             this.scMain.Panel2.Controls.Add(this.gbLogs);
-            this.scMain.Size = new System.Drawing.Size(1439, 796);
-            this.scMain.SplitterDistance = 518;
+            this.scMain.Size = new System.Drawing.Size(720, 409);
+            this.scMain.SplitterDistance = 266;
+            this.scMain.SplitterWidth = 2;
             this.scMain.TabIndex = 2;
             // 
             // gbLogs
@@ -259,8 +263,10 @@
             this.gbLogs.Controls.Add(this.lvLogs);
             this.gbLogs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbLogs.Location = new System.Drawing.Point(0, 0);
+            this.gbLogs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.gbLogs.Name = "gbLogs";
-            this.gbLogs.Size = new System.Drawing.Size(1439, 274);
+            this.gbLogs.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbLogs.Size = new System.Drawing.Size(720, 141);
             this.gbLogs.TabIndex = 0;
             this.gbLogs.TabStop = false;
             this.gbLogs.Text = "Logs";
@@ -271,9 +277,10 @@
             this.chMessage});
             this.lvLogs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvLogs.HideSelection = false;
-            this.lvLogs.Location = new System.Drawing.Point(3, 27);
+            this.lvLogs.Location = new System.Drawing.Point(2, 15);
+            this.lvLogs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lvLogs.Name = "lvLogs";
-            this.lvLogs.Size = new System.Drawing.Size(1433, 244);
+            this.lvLogs.Size = new System.Drawing.Size(716, 124);
             this.lvLogs.TabIndex = 0;
             this.lvLogs.UseCompatibleStateImageBehavior = false;
             this.lvLogs.View = System.Windows.Forms.View.Details;
@@ -286,11 +293,13 @@
             // 
             // pnlOptions
             // 
+            this.pnlOptions.Controls.Add(this.chkShowOnlySourceComponentTypes);
             this.pnlOptions.Controls.Add(this.chkCheckBestPractice);
             this.pnlOptions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlOptions.Location = new System.Drawing.Point(0, 39);
+            this.pnlOptions.Location = new System.Drawing.Point(0, 25);
+            this.pnlOptions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlOptions.Name = "pnlOptions";
-            this.pnlOptions.Size = new System.Drawing.Size(1439, 40);
+            this.pnlOptions.Size = new System.Drawing.Size(720, 21);
             this.pnlOptions.TabIndex = 3;
             // 
             // chkCheckBestPractice
@@ -298,23 +307,35 @@
             this.chkCheckBestPractice.AutoSize = true;
             this.chkCheckBestPractice.Checked = true;
             this.chkCheckBestPractice.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCheckBestPractice.Location = new System.Drawing.Point(4, 4);
+            this.chkCheckBestPractice.Location = new System.Drawing.Point(2, 2);
+            this.chkCheckBestPractice.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chkCheckBestPractice.Name = "chkCheckBestPractice";
-            this.chkCheckBestPractice.Size = new System.Drawing.Size(499, 29);
+            this.chkCheckBestPractice.Size = new System.Drawing.Size(252, 17);
             this.chkCheckBestPractice.TabIndex = 0;
             this.chkCheckBestPractice.Text = "Check best practice before moving components";
             this.chkCheckBestPractice.UseVisualStyleBackColor = true;
             // 
+            // chkShowOnlySourceComponentTypes
+            // 
+            this.chkShowOnlySourceComponentTypes.AutoSize = true;
+            this.chkShowOnlySourceComponentTypes.Location = new System.Drawing.Point(258, 2);
+            this.chkShowOnlySourceComponentTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.chkShowOnlySourceComponentTypes.Name = "chkShowOnlySourceComponentTypes";
+            this.chkShowOnlySourceComponentTypes.Size = new System.Drawing.Size(194, 17);
+            this.chkShowOnlySourceComponentTypes.TabIndex = 1;
+            this.chkShowOnlySourceComponentTypes.Text = "Show only source component types";
+            this.chkShowOnlySourceComponentTypes.UseVisualStyleBackColor = true;
+            // 
             // MainControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.pnlOptions);
             this.Controls.Add(this.tsMain);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "MainControl";
-            this.Size = new System.Drawing.Size(1439, 875);
+            this.Size = new System.Drawing.Size(720, 455);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -356,6 +377,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.Panel pnlOptions;
         private System.Windows.Forms.CheckBox chkCheckBestPractice;
+        private System.Windows.Forms.CheckBox chkShowOnlySourceComponentTypes;
         private System.Windows.Forms.ToolStripDropDownButton tsddbLogs;
         private System.Windows.Forms.ToolStripMenuItem exportLogsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearLogsToolStripMenuItem;
