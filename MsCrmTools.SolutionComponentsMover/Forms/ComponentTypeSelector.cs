@@ -78,7 +78,7 @@ namespace MsCrmTools.SolutionComponentsMover.Forms
                 {
                     var entity = _emc.First(emd => emd.LogicalName == component.GetAttributeValue<string>("primaryentityname"));
 
-                    lvTypes.Items.Add(new ListViewItem(entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.SchemaName) { Tag = component.GetAttributeValue<int>("objecttypecode"), Checked = true });
+                    lvTypes.Items.Add(new ListViewItem(entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.SchemaName) { Tag = component.GetAttributeValue<int>("solutioncomponenttype"), Checked = true });
                 }
             }
 
