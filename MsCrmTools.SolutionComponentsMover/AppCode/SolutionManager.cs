@@ -120,8 +120,7 @@ Remove best practice check if you really want to copy the following entities to 
                         if (settings.ConnectionDetail.OrganizationMajorVersion >= 8)
                         {
                             request.DoNotIncludeSubcomponents =
-                                component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 1 ||
-                                component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value == 2;
+                                component.GetAttributeValue<OptionSetValue>("rootcomponentbehavior")?.Value != 0;
                         }
 
 
